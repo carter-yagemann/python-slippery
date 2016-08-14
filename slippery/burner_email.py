@@ -17,7 +17,7 @@
 
 """Creating and accessing burner emails is the core of python-slippery"""
 
-import urllib2
+import urllib
 from slippery import validator, parser
 
 def _gen_url(new_id, new_key):
@@ -112,11 +112,9 @@ class BurnerEmail(object):
 
     def generate(self):
         """Generate a burner email address and store the id and access key."""
-        conn = urllib2.urlopen('http://slippery.email/app.php?mode=create')
+        conn = urllib.urlopen('http://slippery.email/app.php?mode=create')
         if conn.getcode() != 200:
-            raise urllib2.HTTPError(conn.getcode(),
-                                    'Failed to connct to slippery.',
-                                    conn.info())
+            raise OSError('Failed to connect to slippery.')
         self._url = conn.geturl()
         self._id = conn.geturl().split('/')[4]
         self._key = conn.geturl().split('/')[5]
@@ -147,11 +145,9 @@ class BurnerEmail(object):
           An array of emails. Each email is a dictionary in the form:
             {'id':int, 'sender':str, 'subject':str, 'date':str}
         """
-        conn = urllib2.urlopen(self._url)
+        conn = urllib.urlopen(self._url)
         if conn.getcode() != 200:
-            raise urllib2.HTTPError(conn.getcode(),
-                                    'Failed to connct to slippery.',
-                                    conn.info())
+            raise OSError('Failed to connect to slippery.')
         return parser.parse_inbox(conn.read())
 
     def fetch_email(self, msg_id, msg_type='text'):
@@ -171,11 +167,9 @@ class BurnerEmail(object):
         if not msg_type in ['text', 'html']:
             raise ValueError("type must be 'text' or 'html'.")
         full_url = self._msg_base + msg_id + '/' + msg_type
-        conn = urllib2.urlopen(full_url)
+        conn = urllib.urlopen(full_url)
         if conn.getcode() != 200:
-            raise urllib2.HTTPError(conn.getcode(),
-                                    'Failed to connct to slippery.',
-                                    conn.info())
+            raise OSError('Failed to connect to slippery.')
         return parser.parse_message(conn.read(), msg_type)
 
     def delete_email(self, msg_id):
@@ -187,8 +181,6 @@ class BurnerEmail(object):
             by fetch_emails().
         """
         del_url = _gen_del_url(self._id, self._key, msg_id)
-        conn = urllib2.urlopen(del_url)
+        conn = urllib.urlopen(del_url)
         if conn.getcode() != 200:
-            raise urllib2.HTTPError(conn.getcode(),
-                                    'Failed to connct to slippery.',
-                                    conn.info())
+            raise OSError('Failed to connect to slippery.')

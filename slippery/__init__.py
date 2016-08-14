@@ -28,7 +28,7 @@ __url__ = 'https://bitbucket.org/carter-yagemann/python-slippery'
 __download_url__ = 'https://bitbucket.org/carter-yagemann/python-slippery'
 __description__ = 'A library for interacting with the slippery.email website'
 
-import urllib2
+import urllib
 import socks
 import socket
 
