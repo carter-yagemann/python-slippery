@@ -24,6 +24,14 @@ you want to interact with Slippery via a SSH tunnel, tor, or other proxy.
 Installing
 ==========
 
+The module is on PyPI, install using pip::
+
+    $ pip install python-slippery
+
+-----------
+Development
+-----------
+
 You will need to install python-slippery's dependencies::
 
     $ pip install -Ur requirements.txt
